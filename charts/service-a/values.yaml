@@ -1,0 +1,12 @@
+replicaCount: 1
+image:
+  repository: registry.example.com/service-a
+  tag: "latest"
+service:
+  port: 8080
+env: {}
+
+oids:
+  clientId: service-a
+  clientSecret: "REPLACE_ME"
+  tokenUri: "http://keycloak:8080/realms/master/protocol/openid-connect/token"

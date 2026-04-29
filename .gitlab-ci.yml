@@ -1,0 +1,25 @@
+stages:
+  - build
+  - test
+  - image
+  - publish
+
+build:
+  stage: build
+  script:
+    - ./gradlew build -x test
+
+unit_tests:
+  stage: test
+  script:
+    - ./gradlew test
+
+build_image:
+  stage: image
+  script:
+    - echo "Build docker images (placeholder)"
+
+publish:
+  stage: publish
+  script:
+    - echo "Publish images to registry (placeholder)"
