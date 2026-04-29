@@ -1,0 +1,11 @@
+replicaCount: 1
+image:
+  repository: registry.example.com/service-b
+  tag: "latest"
+service:
+  port: 8080
+env: {}
+
+oids:
+  issuerUri: "http://keycloak:8080/realms/master"
+  jwksUri: "http://keycloak:8080/realms/master/protocol/openid-connect/certs"
