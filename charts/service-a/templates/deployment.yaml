@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-a
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: service-a
+  template:
+    metadata:
+      labels:
+        app: service-a
+    spec:
+      containers:
+      - name: service-a
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        ports:
+        - containerPort: {{ .Values.service.port }}
+        env:
+        - name: OIDC_CLIENT_ID
+          value: {{ .Values.oids.clientId }}
+        - name: OIDC_CLIENT_SECRET
+          value: {{ .Values.oids.clientSecret }}
+        - name: OIDC_TOKEN_URI
+          value: {{ .Values.oids.tokenUri }}

@@ -1,0 +1,10 @@
+# Helm ignore
+*.tgz
+*.bak
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+.git/
+.vscode/
+.idea/

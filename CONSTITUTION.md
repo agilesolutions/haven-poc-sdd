@@ -1,58 +1,327 @@
-# haven-poc-sdd Constitution
+# HAVEN Architecture Constitution
+## Common Ground Initiative – Cloud-Native Microservices Platform
 
-## Core Principles
+Version: 1.0  
+Scope: All services, infrastructure, and deployment artifacts within the HAVEN ecosystem
 
-### I. Microservice-First
-All services are designed as independently deployable, single-responsibility microservices. Each service owns its data and API contract. Services must be independently testable and deployable without coordinating releases across unrelated teams.
+---
 
-### II. Kubernetes-Native Deployments
-Production deployments target Kubernetes. Services must provide container images, a Helm (or equivalent) chart/manifest, and Kubernetes-ready health probes (liveness/readiness). Deployments should follow immutable image principles.
+# 1. Purpose
 
-### III. Twelve-Factor Configuration
-Follow twelve-factor app principles for config: store config in the environment, do not bake runtime configuration into images, and support externalized secrets via the cluster secret mechanism or a managed secret store.
+HAVEN defines a standardized, opinionated architecture for building **secure, interoperable, 15-factor compliant microservices** on Kubernetes.
 
-### IV. Observability (Logging, Metrics, Tracing)
-Structured JSON logging at INFO/WARN/ERROR levels, metrics exposed via an HTTP metrics endpoint, and distributed tracing instrumentation. Logs, metrics, and traces must be configurable and exportable to cluster observability tooling.
+The constitution ensures:
 
-### V. Health, Readiness & Graceful Shutdown
-Services must implement health, readiness, and shutdown hooks. Readiness must reflect the ability to serve production traffic; liveness must detect unrecoverable failures. Services must handle SIGTERM gracefully and complete in-flight requests before exit.
+- Architectural consistency across services
+- Security-by-default design
+- GitOps-driven delivery
+- Infrastructure reproducibility
+- Operational excellence at scale
 
-### VI. Security & Least Privilege
-Communication should use TLS in transit where practical. Services run with least-privilege Kubernetes service accounts and minimal container permissions. Secrets must not be checked into source control.
+All systems within HAVEN MUST comply with this constitution.
 
-### VII. Resilience & Fault Tolerance
-Design for failure: idempotent operations, retries with exponential backoff where appropriate, timeouts, and bulkhead/circuit-breaker patterns for external dependencies. Avoid cascading failures.
+---
 
-### VIII. CI/CD & Immutable Artifacts
-Every change must produce a versioned, immutable container image. CI pipelines build, test, and publish images; CD pipelines promote artifacts through environments and apply Kubernetes manifests via automation.
+# 2. Technology Baseline
 
-### IX. Versioning & Compatibility
-APIs must be versioned. Backward-compatible changes preferred; breaking changes require coordination, a migration plan, and updated contracts.
+All services and platform components MUST use:
 
-### X. Resource Management & Cost Awareness
-Every service must declare CPU/memory requests and limits appropriate to expected load. Teams should monitor resource usage and optimize for cost-effective operation.
+- Java 25
+- Spring Boot 4.x
+- Kubernetes (production runtime)
+- Gradle (Groovy DSL preferred)
+- PostgreSQL (default persistence layer)
 
-## Additional Constraints
+No alternative runtime stacks are permitted unless explicitly approved.
 
-- Avoid stateful single-node assumptions; prefer external managed services for durable state (databases, queues) unless explicitly justified.
-- Image sizes should be kept minimal; use multi-stage builds and small base images where practical.
-- Do not depend on cluster-wide privileges; request the minimal RBAC necessary.
+---
 
-## Development Workflow
+# 3. Platform Runtime Model
 
-- Use local development profiles that simulate production config (e.g., via remote services or emulators) while enabling fast iteration.
-- Write unit and integration tests; include a small contract test for any public API.
-- PRs must include a summary of deployment implications (new manifests, config, secrets) and a basic rollout plan.
-- CI must run tests, static analysis, and a basic container scan before merging.
+All workloads MUST:
 
-## Quality Gates
+- Run as containerized workloads (OCI-compliant images)
+- Execute in Kubernetes only
+- Be stateless by default
+- Expose ports explicitly via container definitions
 
-- All services must have health/readiness endpoints and expose metrics.
-- PRs must have passing CI and at least one approving reviewer in the owning team.
-- Security scans must pass (no high severity findings) before deployment to production.
+Forbidden:
+- Bare-metal deployments
+- VM-only deployments
+- Non-containerized execution
 
-## Governance
-- Constitution changes must be documented and ratified by the platform or architecture owners.
-- Major amendments require a migration/rollback plan and communication to affected teams.
+---
 
-**Version**: 1.0 | **Ratified**: 2026-04-29 | **Last Amended**: 2026-04-29
+# 4. GitOps Delivery Model
+
+All deployment operations MUST follow GitOps principles:
+
+- FluxCD is the only allowed reconciliation engine
+- Git is the single source of truth for cluster state
+- All changes MUST be declarative and version-controlled
+
+Prohibited:
+- Manual kubectl changes in production
+- Direct cluster mutation outside Git reconciliation
+- Drift from declared state
+
+---
+
+# 5. Infrastructure as Code
+
+All infrastructure MUST be provisioned using Terraform.
+
+This includes:
+
+- Kubernetes clusters
+- Networking components
+- DNS configuration
+- Identity and access integration
+- Ingress and certificate systems
+
+Rules:
+- No manual cloud console modifications
+- All infrastructure changes MUST be reviewed via Git
+
+---
+
+# 6. Identity and Security Model
+
+All authentication and authorization MUST use:
+
+- Keycloak (OIDC provider)
+- OAuth2 / OpenID Connect standards
+- JWT-based access tokens
+
+### Requirements:
+
+- Service-to-service authentication MUST use Client Credentials Flow
+- User authentication MUST use Authorization Code Flow
+- All services MUST validate JWT tokens
+- All tokens MUST be validated for:
+    - issuer
+    - audience
+    - expiration
+    - scopes/roles
+
+### Secrets Management:
+
+- Secrets MUST NOT be stored in source code
+- Secrets MUST NOT be committed to Git
+- Secrets MUST be injected at runtime via secure mechanisms
+
+---
+
+# 7. Networking and Ingress
+
+All external traffic MUST be routed through:
+
+- NGINX Ingress Controller
+
+TLS Requirements:
+
+- TLS MUST be enforced for all external endpoints
+- Certificates MUST be issued via cert-manager
+- Let’s Encrypt MUST be used as certificate authority
+
+Rules:
+
+- No direct service exposure via NodePort or LoadBalancer unless explicitly justified
+- HTTP traffic MUST redirect to HTTPS
+- Internal service communication MUST follow least-privilege access rules
+
+---
+
+# 8. Service Design Principles
+
+Each microservice MUST:
+
+- Be independently deployable
+- Be independently scalable
+- Be independently testable
+- Own its own runtime lifecycle
+
+### Forbidden:
+
+- Shared business logic libraries between services
+- Tight runtime coupling between services
+- Cross-service synchronous dependency chains without resilience patterns
+
+---
+
+# 9. Data Ownership Model
+
+Each service MUST own its data store.
+
+Rules:
+
+- One service = one database ownership boundary
+- PostgreSQL is the default datastore
+- Flyway MUST be used for schema migrations
+
+### Forbidden:
+
+- Cross-service database access
+- Shared writable schemas between services
+- Direct table access across service boundaries
+
+---
+
+# 10. API Design Standards
+
+All service interfaces MUST be:
+
+- RESTful (HTTP/JSON only)
+- Versioned (`/api/v1/...`)
+- Documented using OpenAPI 3.1
+
+Requirements:
+
+- Explicit request/response schemas
+- Backward compatibility for minor versions
+- Standardized error model
+
+---
+
+# 11. 15-Factor Compliance
+
+All services MUST comply with the 15-factor cloud-native principles:
+
+- Externalized configuration
+- Stateless execution
+- Logs as event streams
+- Strict dependency declaration
+- Disposability
+- Concurrency-aware design
+- Dev/prod parity
+- Observability-first design
+
+Non-compliant services MUST be rejected.
+
+---
+
+# 12. Configuration Management
+
+All configuration MUST be externalized.
+
+Allowed sources:
+
+- Environment variables
+- Kubernetes ConfigMaps
+- Kubernetes Secrets (encrypted at rest)
+
+Forbidden:
+
+- Hardcoded configuration
+- Environment-specific branching logic in code
+- Static configuration files for environment variation
+
+---
+
+# 13. Observability Standards
+
+All services MUST expose:
+
+- `/actuator/health`
+- `/actuator/info`
+- `/actuator/metrics`
+
+Requirements:
+
+- Structured JSON logging to stdout
+- Correlation ID propagation across services
+- Distributed tracing support (OpenTelemetry-compatible)
+- Prometheus-compatible metrics
+
+---
+
+# 14. Resilience Requirements
+
+All inter-service communication MUST implement:
+
+- Request timeouts (mandatory)
+- Retry policies (bounded)
+- Circuit breakers where appropriate
+
+Rules:
+
+- No unbounded synchronous calls
+- No blocking dependency chains without fallback strategies
+
+---
+
+# 15. Build and Deployment Model
+
+All builds MUST produce:
+
+- Immutable artifacts
+- Versioned container images
+
+Deployment MUST:
+
+- Be automated via CI/CD pipelines
+- Be reconciled via FluxCD
+- Be fully declarative
+
+Forbidden:
+
+- Manual production deployments
+- Mutable runtime artifacts
+
+---
+
+# 16. Certificate and Trust Management
+
+All TLS certificates MUST:
+
+- Be issued via cert-manager
+- Use Let’s Encrypt as the certificate authority
+- Be automatically rotated
+
+Manual certificate handling is prohibited.
+
+---
+
+# 17. Network Security
+
+Default posture:
+
+- Deny all inter-service traffic
+- Explicit allow rules only via Kubernetes NetworkPolicies
+
+Principle:
+
+- Least privilege networking at all layers
+
+---
+
+# 18. Compliance and Enforcement
+
+All systems MUST explicitly declare compliance with this constitution.
+
+Violations include:
+
+- architectural drift
+- security bypasses
+- non-GitOps changes
+- shared data violations
+
+Enforcement priority:
+
+1. Security
+2. Data integrity
+3. GitOps consistency
+4. Observability
+5. Operational simplicity
+
+---
+
+# 19. Evolution of Constitution
+
+This constitution is:
+
+- Versioned
+- Reviewable
+- Evolvable through formal architecture review
+
+No informal deviation is permitted.

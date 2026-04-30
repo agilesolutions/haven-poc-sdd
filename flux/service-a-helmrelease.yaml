@@ -11,7 +11,9 @@ spec:
         kind: GitRepository
         name: repo
         namespace: flux-system
-        # path: ./charts/service-a
   interval: 5m
   values:
     replicaCount: 1
+    image:
+      repository: registry.example.com/service-a
+      tag: latest
