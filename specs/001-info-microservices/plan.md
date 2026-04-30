@@ -1,116 +1,104 @@
-# Implementation Plan: INFO Microservices
+# Implementation Plan: [FEATURE]
 
-**Branch**: `003-info-microservices` | **Date**: 2026-04-29 | **Spec**: `specs/001-info-microservices/spec.md`
-**Input**: Feature specification from `/specs/001-info-microservices/spec.md`
+**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
+**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
+
+**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/plan-template.md` for the execution workflow.
 
 ## Summary
 
-Implement two Spring Boot microservices (Service A and Service B) in a monorepo. Service B is the source-of-truth for a single INFO entity persisted in PostgreSQL. Service A exposes a client-facing GET /info endpoint and forwards authenticated requests to Service B using OIDC client-credentials. Deliverables include service scaffolding (Gradle, Spring Boot 4, JDK 25), container images, Helm charts, GitLab CI for build/publish, FluxCD HelmReleases for deployment (including Keycloak HelmRelease), and observability via Micrometer -> OpenTelemetry Collector -> LGTM stack.
+[Extract from feature spec: primary requirement + technical approach from research]
 
 ## Technical Context
 
-**Language/Version**: Java 25 (JDK 25), Spring Boot 4  
-**Build System**: Gradle (multi-project build)  
-**Primary Dependencies**: Spring Web, Spring Security (OAuth2 Resource Server & Client), Spring Data JPA, PostgreSQL driver, Micrometer OpenTelemetry, OpenTelemetry SDK (if needed), Flyway for DB migrations, Lombok (optional for DTOs), Testcontainers for integration tests.  
-**Storage**: PostgreSQL (managed or in-cluster).  
-**Testing**: JUnit 5, MockMVC for controller tests, Testcontainers for integration tests against Postgres and Keycloak emulation.  
-**Target Platform**: Kubernetes clusters managed with FluxCD (GitOps). Images built in CI and stored in registry (GitLab container registry recommended).  
-**Project Type**: Microservices (monorepo containing two subprojects: service-a, service-b)  
-**Performance Goals**: 95% of requests served under 1s p95 in typical staging load; service-to-service call latency kept low with client-side timeout of 2s and circuit-breaker.  
-**Constraints**: OIDC provider will be Keycloak deployed via FluxCD HelmRelease; services must accept/validate JWT access tokens; secrets stored in cluster secret store; Helm charts required for FluxCD; telemetry exported to LGTM stack via OTel Collector.  
-**Scale/Scope**: Initial scope is a single INFO record and two services for v1.
+<!--
+  ACTION REQUIRED: Replace the content in this section with the technical details
+  for the project. The structure here is presented in advisory capacity to guide
+  the iteration process.
+-->
+
+**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
+**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
+**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
+**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
+**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
+**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
+**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
+**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
 
 ## Constitution Check
 
-The implementation will comply with the repository constitution (Kubernetes-native deployments, health/readiness endpoints, metrics, observability, CI/CD, resource requests, security). No violations identified.
+*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+
+[Gates determined based on constitution file]
 
 ## Project Structure
 
-Recommended monorepo layout (Gradle multi-project):
+### Documentation (this feature)
 
-```
-/ (repo root)
-├─ build.gradle.kts           # root Gradle configuration, plugin management
-├─ settings.gradle.kts
-├─ gradle/                   # wrapper, scripts
-├─ services/
-│  ├─ service-a/             # Spring Boot app: client-facing API
-│  │  ├─ build.gradle.kts
-│  │  └─ src/
-│  └─ service-b/             # Spring Boot app: INFO service + DB
-│     ├─ build.gradle.kts
-│     └─ src/
-├─ charts/                   # Helm charts for both services + shared libs
-│  ├─ service-a/
-│  ├─ service-b/
-│  └─ keycloak/              # optionally vendor chart overrides
-├─ flux/                     # FluxCD HelmRelease manifests referencing charts
-└─ specs/001-info-microservices
-   ├─ spec.md
-   ├─ plan.md
-   ├─ data-model.md
-   ├─ research.md
-   ├─ contracts/
-   └─ quickstart.md
+```text
+specs/[###-feature]/
+├── plan.md              # This file (/speckit.plan command output)
+├── research.md          # Phase 0 output (/speckit.plan command)
+├── data-model.md        # Phase 1 output (/speckit.plan command)
+├── quickstart.md        # Phase 1 output (/speckit.plan command)
+├── contracts/           # Phase 1 output (/speckit.plan command)
+└── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
 ```
 
-**Structure Decision**: Use a Gradle multi-project monorepo with isolated subprojects for `service-a` and `service-b`. Charts will be colocated in `/charts` and consumed by FluxCD manifests in `/flux`.
+### Source Code (repository root)
+<!--
+  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
+  for this feature. Delete unused options and expand the chosen structure with
+  real paths (e.g., apps/admin, packages/something). The delivered plan must
+  not include Option labels.
+-->
 
-## Interfaces & Contracts
+```text
+# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
+src/
+├── models/
+├── services/
+├── cli/
+└── lib/
 
-- Service B: REST API (GET /info, PUT /info) — requires bearer token (OIDC). Documented in `specs/.../contracts/service-b-openapi.yaml`.
-- Service A: REST API (GET /info) — requires bearer token for client requests; when calling Service B, Service A uses client-credentials to obtain an access token from Keycloak and calls B's GET /info.
+tests/
+├── contract/
+├── integration/
+└── unit/
 
-## CI/CD
+# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
+backend/
+├── src/
+│   ├── models/
+│   ├── services/
+│   └── api/
+└── tests/
 
-- GitLab CI pipelines (one pipeline per merge to main and per branch):
-  - Build: Gradle build, unit tests, static analysis
-  - Image build: Build Docker images for service-a and service-b, tag with CI_COMMIT_SHORT_SHA
-  - Publish: Push images to GitLab Container Registry
-  - Release: Create a chart package (helm package) and push to Helm repo (or keep in same git repo and let FluxCD pull charts via git/OCI)
-  - CD: FluxCD watching Git (flux/ directory) will pick up HelmRelease manifests and reconcile the cluster. Keycloak is deployed as a FluxCD-managed HelmRelease.
+frontend/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   └── services/
+└── tests/
 
-## Observability and Telemetry
+# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
+api/
+└── [same as backend above]
 
-- Instrument both services with Micrometer using the OpenTelemetry exporter.
-- Deploy an OpenTelemetry Collector (as part of cluster observability stack) to receive OTLP and export to LGTM stack.
-- Configure metrics endpoint (`/actuator/prometheus` or OpenTelemetry metrics) and traces exported via OTel.
+ios/ or android/
+└── [platform-specific structure: feature modules, UI flows, platform tests]
+```
 
-## Security
+**Structure Decision**: [Document the selected structure and reference the real
+directories captured above]
 
-- Keycloak deployed as an OIDC provider via FluxCD HelmRelease.
-- Service A configured as an OAuth2 client for the client-credentials grant to request tokens from Keycloak when calling Service B.
-- Service B configured as an OAuth2 resource server validating incoming JWT access tokens (issuer, jwks URI) and enforcing scopes/roles where appropriate.
-- Secrets (client ID/secret) will be stored in Kubernetes Secrets and referenced by Helm values.
+## Complexity Tracking
 
-## DB Migrations
+> **Fill ONLY if Constitution Check has violations that must be justified**
 
-- Use Flyway for schema migrations in Service B. Migration scripts placed in `service-b/src/main/resources/db/migration`.
-- Initial migration to create `info` table with columns: name (TEXT primary key), description (TEXT), version (TEXT).
-
-## Phase Plan
-
-- Phase 0 (Research): Completed — technology choices provided by user. research.md reflects the rationale and alternatives.
-- Phase 1 (Design): Produce `data-model.md`, OpenAPI contracts (in `contracts/`), and `quickstart.md`. Update agent context file.
-- Phase 2 (Implementation planning): Produce `tasks.md` and estimate effort per task.
-
-## Risks & Mitigations
-
-- OIDC complexity: Use Keycloak via HelmRelease and standard Spring OAuth2 components; test token flows with Testcontainers-Keycloak or a local Keycloak dev container.
-- Observability plumbing: Use community OTel collector Helm chart and test exporting to LGTM in staging.
-- Resource constraints: Set conservative CPU/memory requests and tune after metrics observed.
-
-## Deliverables
-
-- Gradle multi-project scaffold for Service A and Service B (Spring Boot 4, JDK 25)
-- OpenAPI contracts in `specs/001-info-microservices/contracts/`
-- Helm charts for both services and Keycloak references
-- GitLab CI pipeline snippets in `ci/` or `.gitlab-ci.yml` modifications
-- FluxCD HelmRelease manifests under `flux/`
-- Observability: Micrometer + OTel Collector configuration and sample LGTM exporter config
-
-## Next Steps
-
-1. Generate `data-model.md`, `contracts/` OpenAPI files, and `quickstart.md` (Phase 1) — next action.
-2. Create `tasks.md` with implementation checklist and estimates (Phase 2).
-3. Optionally scaffold the Spring Boot projects and Helm charts (implementation).
+| Violation | Why Needed | Simpler Alternative Rejected Because |
+|-----------|------------|-------------------------------------|
+| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
+| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |

@@ -34,7 +34,7 @@
 - [x] T016 \[P\] Create Keycloak HelmRelease manifest `flux/keycloak-helmrelease.yaml` and chart overrides in `charts/keycloak/` to deploy Keycloak as OIDC provider
 - [x] T017 \[P\] Add Kubernetes Secrets/values templating in `charts/service-a/values.yaml` and `charts/service-b/values.yaml` to consume client ID/secret and JWKS/issuer configs (do not store secrets in repo)
 - [x] T018 Configure CI to build and publish images and to push Helm chart artifacts (update `.gitlab-ci.yml`) at `.gitlab-ci.yml`
-- [ ] T019 \[P\] Add DB migration verification step to CI for Service B (run Flyway validate/migrate in pipeline) in `.gitlab-ci.yml`
+- [x] T019 \[P\] Add DB migration verification step to CI for Service B (run Flyway validate/migrate in pipeline) in `.gitlab-ci.yml`
 
 **Checkpoint**: After these tasks complete, user stories implementation can begin.
 
@@ -53,8 +53,8 @@ Independent Test: Deploy both services locally (or in a test cluster), register 
 - [x] T022 \[P\] \[US1\] Implement `InfoClient` that calls Service B's `GET /info` using Spring WebClient and OAuth2 client credentials (class: `services/service-a/src/main/java/com/example/servicea/client/InfoClient.java`)
 - [x] T023 \[US1\] Wire OAuth2 client registration and token acquisition (or use Spring's `OAuth2AuthorizedClientManager`) for Service A in `services/service-a/src/main/resources/application.yml` and `services/service-a/src/main/java/.../OAuth2ClientConfig.java`
 - [x] T024 \[US1\] Add error handling for upstream failures (map 404/5xx to appropriate responses) in `services/service-a/src/main/java/com/example/servicea/controller/InfoController.java`
-- [ ] T025 \[US1\] Add integration test (mock Service B) for Service A `GET /info` in `services/service-a/src/test/java/com/example/servicea/InfoControllerIT.java`
-- [ ] T026 \[US1\] Add an end-to-end smoke test that runs Service B (Testcontainer or local) and Service A and calls `GET /info` in `tests/integration/service-a-to-b-smoke.sh`
+- [x] T025 \[US1\] Add integration test (mock Service B) for Service A `GET /info` in `services/service-a/src/test/java/com/example/servicea/InfoControllerIT.java`
+- [x] T026 \[US1\] Add an end-to-end smoke test that runs Service B (Testcontainer or local) and Service A and calls `GET /info` in `tests/integration/service-a-to-b-smoke.sh`
 
 Checkpoint: Service A `GET /info` should be runnable independently and return data from Service B when Keycloak and Service B are available.
 
@@ -73,8 +73,8 @@ Independent Test: Use Service B API to create/update INFO and verify retrieval t
 - [x] T029 \[US2\] Implement `InfoService` business service in `services/service-b/src/main/java/com/example/serviceb/service/InfoService.java` to handle persistence and validation
 - [x] T030 \[US2\] Implement `InfoController` REST endpoints in `services/service-b/src/main/java/com/example/serviceb/controller/InfoController.java` for `GET /info` and `PUT /info`
 - [x] T031 \[US2\] Add Flyway migration file `services/service-b/src/main/resources/db/migration/V1__create_info_table.sql` (if not already created by T009)
-- [ ] T032 \[US2\] Add integration tests for Service B using Testcontainers Postgres in `services/service-b/src/test/java/com/example/serviceb/InfoControllerIT.java`
-- [ ] T033 \[US2\] Add security tests to verify that Service B rejects requests without valid JWT tokens in `services/service-b/src/test/java/.../SecurityIT.java`
+- [x] T032 \[US2\] Add integration tests for Service B using Testcontainers Postgres in `services/service-b/src/test/java/com/example/serviceb/InfoControllerIT.java`
+- [x] T033 \[US2\] Add security tests to verify that Service B rejects requests without valid JWT tokens in `services/service-b/src/test/java/.../SecurityIT.java`
 
 Checkpoint: Service B should be functional and independently testable.
 
@@ -84,13 +84,13 @@ Checkpoint: Service B should be functional and independently testable.
 
 **Purpose**: Finalize packaging, observability, deployment wiring, and documentation.
 
-- [ ] T034 \[P\] Update Helm charts `charts/*/values.yaml` to include liveness/readiness probes, resource requests/limits, and OIDC values
-- [ ] T035 \[P\] Add OpenTelemetry Collector HelmRelease and LGTM exporter config in `charts/otel-collector/` and `flux/otel-collector-helmrelease.yaml`
-- [ ] T036 \[P\] Add GitLab CI job to run integration tests and e2e smoke tests before image publish in `.gitlab-ci.yml`
-- [ ] T037 Update `docs/deployment.md` with rollout notes, secrets management, and Keycloak client setup steps
-- [ ] T038 \[P\] Run a local quickstart validation script `scripts/quickstart-validate.sh` to verify quickstart steps work
-- [ ] T039 \[P\] Security hardening: add container image scanning step and remediate high severity findings in CI pipeline
-- [ ] T040 \[P\] Add README sections for observability (how to connect to OTel collector and LGTM)
+- [x] T034 \[P\] Update Helm charts `charts/*/values.yaml` to include liveness/readiness probes, resource requests/limits, and OIDC values
+- [x] T035 \[P\] Add OpenTelemetry Collector HelmRelease and LGTM exporter config in `charts/otel-collector/` and `flux/otel-collector-helmrelease.yaml`
+- [x] T036 \[P\] Add GitLab CI job to run integration tests and e2e smoke tests before image publish in `.gitlab-ci.yml`
+- [x] T037 Update `docs/deployment.md` with rollout notes, secrets management, and Keycloak client setup steps
+- [x] T038 \[P\] Run a local quickstart validation script `scripts/quickstart-validate.sh` to verify quickstart steps work
+- [x] T039 \[P\] Security hardening: add container image scanning step and remediate high severity findings in CI pipeline
+- [x] T040 \[P\] Add README sections for observability (how to connect to OTel collector and LGTM)
 
 ---
 

@@ -14,3 +14,6 @@ spec:
   interval: 5m
   values:
     replicaCount: 1
+    image:
+      repository: registry.example.com/service-b
+      tag: latest

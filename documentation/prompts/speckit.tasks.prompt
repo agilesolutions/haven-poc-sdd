@@ -1,0 +1,220 @@
+/speckit.tasks
+
+Use the HAVEN Architecture Constitution and the approved /speckit.plan as the source of truth.
+
+You are now generating an implementation task breakdown for a Kubernetes-native, GitOps-driven microservices platform.
+
+---
+
+# 1. Objective
+
+Transform the system plan into a **detailed, execution-ready engineering backlog**.
+
+Each task MUST be:
+
+- atomic (single responsibility)
+- independently verifiable
+- implementation-ready
+- mapped to a specific system component
+- aligned with GitOps delivery
+
+---
+
+# 2. Scope
+
+Generate tasks for the full HAVEN platform:
+
+## Services
+- Service A (API Orchestrator)
+- Service B (Domain + PostgreSQL service)
+
+## Platform Components
+- Keycloak (OIDC provider)
+- PostgreSQL
+- NGINX Ingress Controller
+- cert-manager (Let’s Encrypt)
+- FluxCD (GitOps)
+- Terraform (infrastructure provisioning)
+- Observability stack (Prometheus / OpenTelemetry)
+
+---
+
+# 3. Task Structure Requirements
+
+Each task MUST include:
+
+- Task ID (unique)
+- Title
+- Component (Service / Platform / Infra)
+- Description (clear implementation intent)
+- Dependencies
+- Acceptance Criteria
+- Verification Method
+- Compliance Tags:
+  - 15-factor
+  - security
+  - gitops
+  - observability
+  - kubernetes
+  - terraform (if applicable)
+
+---
+
+# 4. Task Grouping
+
+Organize tasks into the following epics:
+
+## EPIC A — Infrastructure Foundation (Terraform)
+- Kubernetes cluster provisioning
+- Networking setup
+- DNS configuration
+- Keycloak deployment
+- cert-manager installation
+- NGINX ingress installation
+
+---
+
+## EPIC B — Identity & Security Setup
+- Keycloak realm configuration
+- OAuth2 clients for Service A and B
+- Role/scope definitions
+- JWT validation configuration
+- Secret management strategy
+
+---
+
+## EPIC C — Core Services Implementation
+### Service A
+- Spring Boot project bootstrap
+- REST API implementation
+- OAuth2 client integration
+- WebClient service-to-service calls
+- Observability integration
+
+### Service B
+- Spring Boot project bootstrap
+- REST API implementation
+- PostgreSQL integration
+- Flyway migration setup
+- OAuth2 resource server configuration
+
+---
+
+## EPIC D — Data Layer Implementation
+- PostgreSQL provisioning
+- Schema design per service
+- Migration pipeline setup
+- Data isolation enforcement
+
+---
+
+## EPIC E — GitOps & Deployment (FluxCD)
+- Git repository structure setup
+- FluxCD bootstrap configuration
+- Kustomize/Helm deployment definitions
+- Environment overlays (dev/test/prod)
+- Automated reconciliation setup
+
+---
+
+## EPIC F — CI/CD Pipeline
+- Build pipeline definition
+- Docker image build process
+- Security scanning integration
+- Artifact versioning strategy
+- GitOps commit-based deployment flow
+
+---
+
+## EPIC G — Observability Implementation
+- Metrics instrumentation (Micrometer)
+- Logging standardization (JSON structured logs)
+- OpenTelemetry tracing setup
+- Prometheus scraping configuration
+- Correlation ID propagation
+
+---
+
+## EPIC H — Kubernetes Runtime Configuration
+- Deployment manifests
+- Service definitions
+- Ingress rules
+- TLS configuration via cert-manager
+- Resource limits and HPA configuration
+- Network policies
+
+---
+
+## EPIC I — Resilience & Reliability
+- Timeout configuration per service call
+- Retry policies
+- Circuit breaker implementation
+- Failure handling strategies
+- Graceful degradation patterns
+
+---
+
+# 5. Dependency Rules
+
+- Infrastructure MUST precede all service deployment tasks
+- Keycloak MUST be available before service security configuration
+- PostgreSQL MUST exist before Service B implementation
+- FluxCD MUST be configured before deployment tasks
+- Observability must be integrated after service skeleton creation but before production readiness
+
+---
+
+# 6. Execution Order Constraint
+
+Tasks MUST be ordered by dependency chain:
+
+1. Terraform infrastructure
+2. Platform services (Keycloak, ingress, cert-manager)
+3. Observability foundation
+4. Service scaffolding
+5. Security integration
+6. Data layer
+7. GitOps deployment
+8. Hardening (resilience, policies, scaling)
+
+---
+
+# 7. Compliance Rules
+
+Every task MUST comply with:
+
+- HAVEN Architecture Constitution
+- 15-factor cloud-native principles
+- GitOps-only deployment model
+- Zero manual production configuration
+- Strict service ownership boundaries
+
+---
+
+# 8. Output Format
+
+Return tasks in the following structure:
+
+## Epic Name
+
+### Task ID: HAVEN-XXX
+- Title:
+- Component:
+- Description:
+- Dependencies:
+- Acceptance Criteria:
+- Verification:
+- Compliance Tags:
+
+---
+
+# 9. Final Requirement
+
+The output MUST be directly usable to:
+
+- create GitHub issues
+- populate project boards
+- drive engineering sprint planning
+- map to CI/CD execution pipelines
+
+No abstract or non-actionable tasks are allowed.

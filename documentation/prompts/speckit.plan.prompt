@@ -1,0 +1,204 @@
+/speckit.plan
+
+Use the HAVEN Architecture Constitution (Common Ground Initiative) as the governing set of constraints.
+
+You are planning the implementation of a Kubernetes-native, GitOps-driven microservices system using:
+
+- Java 25
+- Spring Boot 4.x
+- Kubernetes
+- FluxCD (GitOps)
+- Terraform (Infrastructure as Code)
+- Keycloak (OIDC provider)
+- NGINX Ingress Controller
+- cert-manager (Let’s Encrypt TLS)
+
+---
+
+# 1. Goal of Planning Phase
+
+Produce a **complete, implementation-ready engineering plan** that decomposes the system into:
+
+- services
+- infrastructure components
+- deployment artifacts
+- security model
+- data model
+- CI/CD pipeline
+- observability model
+
+The output MUST be actionable by engineering teams without further architectural clarification.
+
+---
+
+# 2. Scope Definition
+
+Based on the HAVEN reference architecture, include:
+
+## Core Services
+- Service A (API Orchestrator / Edge API)
+- Service B (Domain Service with PostgreSQL persistence)
+
+## Platform Components
+- Keycloak (OIDC authentication provider)
+- PostgreSQL (per-service or isolated schema model)
+- NGINX Ingress Controller
+- cert-manager (Let’s Encrypt integration)
+- FluxCD (GitOps reconciliation)
+- Terraform-managed infrastructure layer
+
+---
+
+# 3. Required Planning Outputs
+
+Generate the following structured plan sections:
+
+## 3.1 System Decomposition Plan
+- Define each service boundary
+- Responsibilities per service
+- Ownership of data and APIs
+- Interaction patterns between services
+
+---
+
+## 3.2 API Design Plan
+- Define REST endpoints per service
+- Versioning strategy (/api/v1/)
+- Request/response contracts
+- Error model standardization
+- OpenAPI generation strategy
+
+---
+
+## 3.3 Security & Identity Plan
+- Keycloak realm design
+- Client configuration (Service A, Service B)
+- OAuth2 flows:
+  - Client Credentials (service-to-service)
+  - Authorization Code (user-facing if applicable)
+- JWT validation strategy per service
+- Role/scope model definition
+
+---
+
+## 3.4 Data Architecture Plan
+- Database ownership model per service
+- PostgreSQL schema design approach
+- Flyway migration strategy
+- Data isolation rules
+
+---
+
+## 3.5 Infrastructure Plan (Terraform)
+Define:
+- Kubernetes cluster provisioning approach
+- Networking layer
+- DNS configuration
+- Ingress setup
+- cert-manager + Let’s Encrypt configuration
+- Keycloak deployment strategy (managed or self-hosted)
+
+---
+
+## 3.6 GitOps Deployment Plan (FluxCD)
+Define:
+- Repository structure (mono vs multi-repo)
+- FluxCD bootstrap process
+- Kustomize/Helm strategy
+- Environment promotion strategy (dev/test/prod)
+- Drift detection and reconciliation rules
+
+---
+
+## 3.7 CI/CD Plan
+Define:
+- Build pipeline stages:
+  - compile
+  - test
+  - container build
+  - security scan
+  - publish artifact
+- Image versioning strategy
+- Promotion flow via Git commits (GitOps principle)
+
+---
+
+## 3.8 Observability Plan
+Define:
+- Metrics strategy (Micrometer + Prometheus)
+- Logging strategy (structured JSON logs)
+- Tracing strategy (OpenTelemetry)
+- Required Actuator endpoints
+- Correlation ID propagation model
+
+---
+
+## 3.9 Resilience & Reliability Plan
+Define:
+- timeout strategy
+- retry strategy
+- circuit breaker usage
+- failure isolation principles
+- degradation behavior
+
+---
+
+## 3.10 Kubernetes Runtime Plan
+Define:
+- deployment strategy (Deployments, Services, Ingress)
+- resource requests/limits policy
+- autoscaling (HPA) strategy
+- namespace structure
+- network policies
+
+---
+
+## 3.11 Environments Strategy
+Define:
+- dev / test / staging / production separation
+- configuration differences
+- promotion flow
+- secrets handling per environment
+
+---
+
+# 4. Constraints (Non-Negotiable)
+
+All plans MUST strictly comply with:
+
+- HAVEN Architecture Constitution
+- 15-factor cloud-native principles
+- GitOps-only deployment model
+- Zero manual production changes
+- Strict service data ownership
+- OIDC-based security everywhere
+
+---
+
+# 5. Output Format Requirements
+
+Return the plan as:
+
+- Structured Markdown
+- Clearly numbered sections
+- Implementation-ready decisions (no vague recommendations)
+- Explicit architectural choices (not options)
+
+Avoid:
+- generic theory
+- unresolved decisions
+- alternative design proposals
+
+---
+
+# 6. Final Requirement
+
+The output MUST be sufficient for a team to immediately start:
+
+- Terraform implementation
+- Kubernetes manifests
+- Spring Boot service scaffolding
+- Keycloak configuration
+- FluxCD bootstrap
+
+without requiring further architectural clarification.

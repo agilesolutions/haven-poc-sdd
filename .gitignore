@@ -19,3 +19,60 @@
 **/build/
 #gradlew
 #gradlew.bat
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+
+# Environment
+.env*
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Universal
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+
+# Docker
+Dockerfile*
+.dockerignore
+coverage/
+
+# Helm
+*.tgz
+charts/*/charts/
+
+# Terraform
+.terraform/
+*.tfstate*
+*.tfvars
+.terraform.lock.hcl
+
+# Kubernetes
+*.secret.yaml
+secrets/
+.kube/
+kubeconfig*
+*.key
+*.crt
+
+# Misc
+*.bak
+*.old
+*.orig
+*.rej

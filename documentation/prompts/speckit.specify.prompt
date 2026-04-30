@@ -1,0 +1,128 @@
+Use the HAVEN Architecture Constitution (Common Ground Initiative Kubernetes Platform) as mandatory constraints.
+
+Design and implement a cloud-native microservices system using:
+
+- Java 25
+- Spring Boot 4.x
+- Kubernetes deployment
+- GitOps via FluxCD
+- Terraform-based infrastructure provisioning
+
+---
+
+## System Goal
+- Service A exposes an info REST API endpoint that invokes an endpoint on service b
+- Service B derives info from a postgresql database table where entity layout is name, description and version.
+- Service interaction need to get protected with OIDC client credential flow where keycloak is the OIDC authentication provider.
+- Both services need to be deployed on kubernetes with fluxcd and terraform for infrastructure provisioning.
+- Both services need to be instrumented with prometheus metrics and structured logging.
+- Both services need to be resilient with timeouts, retries and circuit breakers where appropriate.
+- Both services need to be designed with 15-factor principles and have isolated data ownership.
+- Both services need to expose OpenAPI 3.1 REST APIs and be independently scalable.
+- Both services need to be stateless by default and follow Kubernetes-native deployment models.
+- Both services need to have JWT validation and role/scope-based authorization for security.
+- Both services need to have no unsecured internal endpoints and be designed with security in mind.
+- Both services need to have a deployment pipeline description and failure mode analysis included in the output.
+- Both services need to have a complete system architecture, service decomposition, API contracts (OpenAPI), Kubernetes manifests (FluxCD-compatible), Terraform infrastructure definition outline, Keycloak realm + client configuration, security flow diagrams (OIDC flows), and observability setup (metrics/logging/tracing) included in the output.
+- Both services need to strictly comply with the HAVEN Architecture Constitution.
+
+---
+
+## Architecture Requirements
+
+Design a system consisting of:
+
+- Multiple independently deployable Spring Boot microservices
+- Kubernetes-native deployment model
+- Stateless services by default
+
+Each service MUST:
+- expose OpenAPI 3.1 REST APIs
+- be independently scalable
+- follow 15-factor principles
+- have isolated data ownership
+
+---
+
+## Security Model
+
+All services MUST be secured using:
+
+- Keycloak as OIDC provider
+- OAuth2 Client Credentials for service-to-service communication
+- OAuth2 Authorization Code Flow for user access
+
+Requirements:
+- JWT validation in every service
+- Role/scope-based authorization
+- No unsecured internal endpoints
+
+---
+
+## Infrastructure & Platform
+
+The system MUST assume:
+
+- Kubernetes as runtime
+- NGINX Ingress Controller as edge gateway
+- cert-manager for TLS certificates
+- Let’s Encrypt for certificate issuance
+- FluxCD for GitOps continuous delivery
+- Terraform for all infrastructure provisioning
+
+No manual infrastructure changes are allowed.
+
+---
+
+## Data Layer
+
+Each service MUST:
+
+- own its database
+- use PostgreSQL (preferred)
+- use Flyway for migrations
+- never access another service’s database directly
+
+---
+
+## Observability Requirements
+
+All services MUST include:
+
+- Spring Boot Actuator endpoints
+- Prometheus-compatible metrics
+- structured JSON logging
+- distributed tracing propagation
+
+---
+
+## Resilience Requirements
+
+All inter-service calls MUST implement:
+
+- timeouts
+- retry policies
+- circuit breakers where appropriate
+
+---
+
+## Output Required
+
+Generate:
+
+1. Complete system architecture
+2. Service decomposition
+3. API contracts (OpenAPI)
+4. Kubernetes manifests (FluxCD-compatible)
+5. Terraform infrastructure definition outline
+6. Keycloak realm + client configuration
+7. Security flow diagrams (OIDC flows)
+8. Observability setup (metrics/logging/tracing)
+9. Deployment pipeline description
+10. Failure mode analysis
+
+---
+
+## Constraint
+
+All generated artifacts MUST strictly comply with the HAVEN Architecture Constitution.
