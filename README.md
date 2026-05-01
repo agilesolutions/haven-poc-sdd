@@ -1,7 +1,7 @@
 # Git Branching Workflow Extension
 
 This [Haven](https://haven.commonground.nl/techniek) 15 factor compliant POC implementing a set of Spring Boot MicroServices. The project
-was AI Spec-Driven developed and scaffolded with GitHub Spec Kit. This is a ground up implementation of the [same application](https://github.com/agilesolutions/haven-poc) that custom engineered with the support of GitHub Copilot.
+was AI Spec-Driven developed and scaffolded with GitHub Spec Kit. This is a ground up implementation of the [same application](https://github.com/agilesolutions/haven-poc) that was initially custom engineered with the support of GitHub Copilot.
 ## Features
 - **Microservices Architecture**: SpringBoot 4 microservices with RESTful APIs for modularity and scalability.
 - **Observability**: SpringBoot 4 method-level observability with OpenTelemetry for distributed tracing and metrics collection.
