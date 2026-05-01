@@ -1,0 +1,19 @@
+# Docker ignore for Java/Spring Boot project
+.git/
+node_modules/
+*.log*
+.env*
+build/
+dist/
+coverage/
+charts/
+*.tgz
+*.md
+*.bak
+*.old
+*.orig
+*.rej
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
