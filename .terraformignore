@@ -1,0 +1,5 @@
+# Terraform ignore
+.terraform/
+*.tfstate*
+*.tfvars
+.terraform.lock.hcl

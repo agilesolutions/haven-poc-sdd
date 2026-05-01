@@ -1,0 +1,59 @@
+openapi: 3.0.3
+info:
+  title: Service B - INFO API
+  version: 1.0.0
+paths:
+  /info:
+    get:
+      summary: Get the canonical INFO record
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: INFO record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Info'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+    put:
+      summary: Create or update the INFO record
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Info'
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+        '400':
+          description: Validation error
+        '401':
+          description: Unauthorized
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Info:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        version:
+          type: string
+      required:
+        - name
+        - version

@@ -1,0 +1,35 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_IMAGE: "registry.example.com/${CI_PROJECT_NAME}"
+
+build:
+  stage: build
+  script:
+    - ./gradlew clean build
+    - docker build -t $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker push $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA
+
+test:
+  stage: test
+  script:
+    - ./gradlew test
+    - ./gradlew :service-b:flywayValidate
+    - ./gradlew :service-b:flywayMigrate
+
+integration:
+  stage: test
+  script:
+    - ./gradlew :service-a:integrationTest
+    - ./gradlew :service-b:integrationTest
+    - bash tests/integration/service-a-to-b-smoke.sh
+
+deploy:
+  stage: deploy
+  script:
+    - helm upgrade --install ${CI_PROJECT_NAME} ./charts/${CI_PROJECT_NAME} \
+        --set image.repository=$DOCKER_IMAGE \
+        --set image.tag=$CI_COMMIT_SHORT_SHA
